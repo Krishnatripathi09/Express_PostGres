@@ -27,8 +27,14 @@ authRouter.get("/user", async (req, res) => {
 
   const user = await User.find({})
     .select("firstName lastName email")
-    .skip()
+    .skip(skip)
     .limit(limit);
 
   res.status(200).send("found User =>" + user);
+});
+
+authRouter.get("/user/data", async (req, res) => {
+  const user = await User.findUserWithFirstLetter(req.body.firstName);
+
+  res.status(200).send("Found User ==>" + user);
 });
