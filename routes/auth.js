@@ -34,7 +34,9 @@ authRouter.get("/user", async (req, res) => {
 });
 
 authRouter.get("/user/data", async (req, res) => {
-  const user = await User.findUserWithFirstLetter(req.body.firstName);
+  const user = await User.find({
+    $and: [{ firstName: req.body.firstName }, { lastName: req.body.lastName }],
+  });
 
   res.status(200).send("Found User ==>" + user);
 });
