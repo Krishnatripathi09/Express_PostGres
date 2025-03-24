@@ -1,23 +1,30 @@
 const express = require("express");
 const authRouter = express.Router();
+const bcrypt = require("bcrypt");
 const User = require("../model/userSchema");
+const { validateSignUpData } = require("../utils/validation");
 
 authRouter.post("/signup", async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  try {
+    validateSignUpData(req);
+    const { firstName, lastName, email, password } = req.body;
 
-  const data = new User({
-    firstName,
-    lastName,
-    email,
-    password,
-  });
+    const passwordHash = await bcrypt.hash(password, 10);
 
-  await data.save();
+    const data = new User({
+      firstName,
+      lastName,
+      email,
+      password: passwordHash,
+    });
 
-  res.status(201).send("User Created Successfully");
+    await data.save();
+
+    res.status(201).send("User Created Successfully");
+  } catch (err) {
+    res.status(500).send("Error Occured :" + err);
+  }
 });
-
-module.exports = authRouter;
 
 authRouter.get("/user", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -40,3 +47,5 @@ authRouter.get("/user/data", async (req, res) => {
 
   res.status(200).send("Found User ==>" + user);
 });
+
+module.exports = authRouter;
