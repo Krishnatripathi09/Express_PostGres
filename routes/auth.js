@@ -39,12 +39,15 @@ authRouter.post("/signin", async (req, res) => {
 
   const passwordHashed = foundUser.password;
 
-  const validPassword = await bcrypt.compare(password, passwordHashed);
+  const validPassword = await foundUser.verifyPWD(password);
 
   if (validPassword) {
-    const token = await jwt.sign({ id }, "MySecretToken%6789");
+    const token = await foundUser.getJWT();
 
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 3600000),
+      httpOnly: true,
+    });
     res.status(200).send("Logged-In Successfullly");
   } else {
     res.status(400).send("Please verify your credentials");
