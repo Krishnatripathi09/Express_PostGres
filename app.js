@@ -1,17 +1,13 @@
 const express = require("express");
-const authRouter = require("./routes/auth");
-const {User} = require("./model/userSchema")
+const { authRouter } = require("./routes/auth");
 const app = express();
 
 app.use(express.json());
 
 const { connectDB } = require("./config/dbConnection");
-const { where } = require("./model/userSchema");
-const userSchema = require("./model/userSchema");
 
 const PORT = 3000;
 
-app.use("/", authRouter);
 connectDB().then(() => {
   console.log("Connected to DataBase Successfully");
 
@@ -20,4 +16,4 @@ connectDB().then(() => {
   });
 });
 
-
+app.use("/", authRouter);

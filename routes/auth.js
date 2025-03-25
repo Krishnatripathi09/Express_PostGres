@@ -26,26 +26,26 @@ authRouter.post("/signup", async (req, res) => {
   }
 });
 
-authRouter.get("/user", async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  let limit = parseInt(req.query.limit) || 1;
-  limit = limit > 50 ? 50 : limit;
-  const skip = (page - 1) * 10;
+authRouter.post("/signin", async (req, res) => {
+  const { email, password } = req.body;
 
-  const user = await User.find({})
-    .select("firstName lastName email")
-    .skip(skip)
-    .limit(limit);
+  const foundUser = await User.findOne({ email });
 
-  res.status(200).send("found User =>" + user);
+  if (!foundUser) {
+    res.status(404).send("Please Verify your Credentials : User Not Found");
+  }
+
+  const passwordHashed = foundUser.password;
+
+  const verifyUser = await bcrypt.compare(password, passwordHashed);
+
+  if (!verifyUser) {
+    res.status(400).send("Please verify your credentials");
+  }
+
+  res.status(200).send("Logged-In Successfullly");
 });
 
-authRouter.get("/user/data", async (req, res) => {
-  const user = await User.find({
-    $and: [{ firstName: req.body.firstName }, { lastName: req.body.lastName }],
-  });
-
-  res.status(200).send("Found User ==>" + user);
-});
-
-module.exports = authRouter;
+module.exports = {
+  authRouter,
+};

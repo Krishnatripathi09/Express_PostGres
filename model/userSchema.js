@@ -38,8 +38,4 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.statics.findUserWithFirstLetter = function (text) {
-  return this.find({ firstName: { $regex: `${text}$`, $options: "i" } });
-};
-
 module.exports = mongoose.model("User", userSchema);

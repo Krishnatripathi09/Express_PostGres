@@ -1,4 +1,3 @@
-const express = require("express");
 const validator = require("validator");
 const validateSignUpData = (req, res) => {
   const { firstName, lastName, email, password } = req.body;
