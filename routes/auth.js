@@ -1,6 +1,7 @@
 const express = require("express");
 const authRouter = express.Router();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../model/userSchema");
 const { validateSignUpData } = require("../utils/validation");
 
@@ -34,16 +35,20 @@ authRouter.post("/signin", async (req, res) => {
   if (!foundUser) {
     res.status(404).send("Please Verify your Credentials : User Not Found");
   }
+  const id = foundUser.id;
 
   const passwordHashed = foundUser.password;
 
-  const verifyUser = await bcrypt.compare(password, passwordHashed);
+  const validPassword = await bcrypt.compare(password, passwordHashed);
 
-  if (!verifyUser) {
+  if (validPassword) {
+    const token = await jwt.sign({ id }, "MySecretToken%6789");
+
+    res.cookie("token", token);
+    res.status(200).send("Logged-In Successfullly");
+  } else {
     res.status(400).send("Please verify your credentials");
   }
-
-  res.status(200).send("Logged-In Successfullly");
 });
 
 module.exports = {
