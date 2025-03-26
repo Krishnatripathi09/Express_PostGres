@@ -13,7 +13,7 @@ const authMiddleWare = async (req, res, next) => {
     const { id } = decodedMsg;
 
     const user = await User.findById(id).select(
-      "firstName lastName email createdAt"
+      "firstName lastName email password createdAt"
     );
 
     if (!user) {
