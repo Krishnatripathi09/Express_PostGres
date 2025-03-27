@@ -6,20 +6,20 @@ const userSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: true,
+      //  required: true,
       minLength: 5,
       maxLength: 40,
     },
 
     lastName: {
       type: String,
-      required: true,
+      //required: true,
       minLength: 3,
       maxLength: 40,
     },
     email: {
       type: String,
-      required: true,
+      //required: true,
       validate(value) {
         if (!validator.isEmail(value)) {
           throw new Error("Please Enter Valid Email");
@@ -28,12 +28,20 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      //required: true,
       validate(value) {
         if (!validator.isStrongPassword(value)) {
           throw new Error("Please Enter Strong Password");
         }
       },
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    file: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }

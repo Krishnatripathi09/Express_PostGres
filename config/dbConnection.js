@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   await mongoose.connect(
-    "mongodb+srv://fiwesok606:sXdgMYncEVnXue1T@cluster0.s89mg.mongodb.net/newDataBase"
+    "mongodb+srv://NewUser12345:NewUser12345@cluster0.dmnbvon.mongodb.net/newDataBaseCreated"
   );
 };
 

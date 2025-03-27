@@ -47,6 +47,8 @@ profileRouter.patch("/user/password", authMiddleWare, async (req, res) => {
 
   if (!isVaildPWD) {
     res.status(400).send("Please Enter Valid Old Password");
+  } else if (!validator.isStrongPassword(newPassword)) {
+    return res.status(400).send("Please Enter Strong New Password");
   }
 
   const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -56,6 +58,10 @@ profileRouter.patch("/user/password", authMiddleWare, async (req, res) => {
 
   res.status(200).send("Password Updated SuccessFully");
 });
+
+
+
+
 
 module.exports = {
   profileRouter,
